@@ -34,9 +34,6 @@ class ProjectRepositoryTest(
 
     @Test
     fun equalsIssue() {
-//        val contact = contactRepository.findById("john@verybigclient.com").get()
-//        assertTrue(contact == contact.copy())
-
         val project = projectRepository.findById(1).get()
         assertTrue(project == project.copy())
     }

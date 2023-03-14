@@ -20,15 +20,16 @@ data class Project(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     val id: Long? = null,
+) {
 
     @Column(name = "name", nullable = false)
-    var name: String? = null,
+    var name: String? = null
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id", nullable = false)
-    var client: Client,
+    var client: Client? = null
 
-    )
+}
 
 @Table(name = "client")
 @Entity
