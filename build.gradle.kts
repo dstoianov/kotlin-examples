@@ -41,8 +41,8 @@ tasks.withType<Test> {
 }
 
 
-allOpen {
-    annotation("javax.persistence.Entity")
-    annotation("javax.persistence.MappedSuperclass")
-    annotation("javax.persistence.Embeddable")
-}
+//allOpen {
+//    annotation("javax.persistence.Entity")
+//    annotation("javax.persistence.MappedSuperclass")
+//    annotation("javax.persistence.Embeddable")
+//}

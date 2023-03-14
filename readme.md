@@ -11,6 +11,4 @@ These additional references:
 * https://www.youtube.com/watch?v=a_6V8xwiv04
 * https://kotlinlang.org/docs/all-open-plugin.html#spring-support
 * https://docs.oracle.com/javaee/5/tutorial/doc/bnbqa.html
-* 
-
 
