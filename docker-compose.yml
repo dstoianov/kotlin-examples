@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:15.2
+    environment:
+      - POSTGRES_USER=projects
+      - POSTGRES_PASSWORD=projects
+      - POSTGRES_DB=projects
+    ports:
+      - 5432:5432
