@@ -20,12 +20,10 @@ class ProjectRepositoryTest(
         assertTrue(project.isPresent)
     }
 
-    /*
-    https://docs.oracle.com/javaee/5/tutorial/doc/bnbqa.html
-    https://docs.oracle.com/cd/E19798-01/821-1841/bnbqb/index.html
-
+    /**
+     * https://docs.oracle.com/javaee/5/tutorial/doc/bnbqa.html
+     * https://docs.oracle.com/cd/E19798-01/821-1841/bnbqb/index.html
      */
-
     @Test
     fun lazyLoadEnabled() {
         val project = projectRepository.findById(1).get()

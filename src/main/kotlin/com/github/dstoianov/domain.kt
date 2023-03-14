@@ -24,7 +24,7 @@ data class Project(
     @Column(name = "name", nullable = false)
     var name: String? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     var client: Client,
 
