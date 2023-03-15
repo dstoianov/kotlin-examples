@@ -1,48 +1,35 @@
 package com.github.dstoianov
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import java.io.Serializable
+import javax.persistence.*
 import org.hibernate.Hibernate
 import org.hibernate.annotations.NaturalId
 
 
 @Table(name = "project")
 @Entity
-//open /* we do not need open here we have enabled plugin */
 data class Project(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    val id: Long? = null,
+    val id: Long? = null
 ) {
-
-    fun isNew() = id == null
 
     @Column(name = "name", nullable = false)
     var name: String? = null
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "client_id", nullable = true)
-    var client: Client? = null
+    @JoinColumn(name = "client_id", nullable = false)
+    lateinit var client: Client
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
-        other as Project
+    fun isNew(): Boolean = id == null
 
-        return id != null && id == other.id
+
+    // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+
+    override fun hashCode(): Int {
+        return this::class.hashCode()
     }
-
-    override fun hashCode(): Int = javaClass.hashCode()
-
 }
 
 @Table(name = "client")
@@ -51,17 +38,18 @@ data class Client(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    val id: Long? = null,
+    val id: Long? = null
+) {
 
     @Column(name = "name", nullable = false)
-    var name: String,
+    lateinit var name: String
 
-    @OneToMany(mappedBy = "client", orphanRemoval = true)
-    var projects: MutableSet<Project> = mutableSetOf(),
+    @OneToMany(mappedBy = "client")
+    var projects: MutableSet<Project> = mutableSetOf()
 
     @OneToMany(mappedBy = "client")
     var contacts: MutableSet<Contact> = mutableSetOf()
-)
+}
 
 @Table(name = "contact")
 @Entity
@@ -84,3 +72,23 @@ data class Contact(
     @JoinColumn(name = "client_id", nullable = false)
     var client: Client,
 )
+
+
+@MappedSuperclass
+open class BaseLongIdEntity() : Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    open var id: Long? = null
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is BaseLongIdEntity) return false
+        if (Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+
+
+        return id != null && id == other.id
+    }
+
+    override fun hashCode(): Int = javaClass.hashCode()
+}

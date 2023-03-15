@@ -1,6 +1,7 @@
 package com.github.dstoianov
 
 import org.hibernate.proxy.HibernateProxy
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.platform.commons.logging.LoggerFactory
@@ -60,19 +61,18 @@ class ProjectRepositoryTest(
     }
 
 
-//    @Test
-//    fun valForIdTest() {
-//        val awesomeClient = clientRepository.findById(1).get()
-//        val project = Project().apply {
-////            id = 100L
-//            name = "new project"
-//            client = awesomeClient
-//        }
-//        assertTrue(project.isNew())
-//        projectRepository.save(project)
-//
-//        assertFalse(project.isNew())
-//    }
+    @Test
+    fun valForIdTest() {
+        val project = Project().apply {
+//            id = 100L
+            name = "new project"
+            client = Client(1L, "client name")
+        }
+        assertTrue(project.isNew())
+        projectRepository.save(project)
+
+        assertFalse(project.isNew())
+    }
 //
 //    @Test
 //    fun lateInitWorks() {
