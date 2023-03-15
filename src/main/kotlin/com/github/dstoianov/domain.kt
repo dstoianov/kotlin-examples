@@ -26,8 +26,10 @@ data class Project(
     var name: String? = null
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "client_id", nullable = false)
+    @JoinColumn(name = "client_id", nullable = true)
     var client: Client? = null
+
+    override fun hashCode(): Int = javaClass.hashCode()
 
 }
 

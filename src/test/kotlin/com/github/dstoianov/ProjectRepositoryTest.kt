@@ -11,7 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ProjectRepositoryTest(
-    @Autowired val projectRepository: ProjectRepository
+    @Autowired val projectRepository: ProjectRepository,
+    @Autowired val clientRepository: ClientRepository
 ) {
 
     @Test
@@ -28,7 +29,7 @@ class ProjectRepositoryTest(
     fun lazyLoadEnabled() {
         val project = projectRepository.findById(1).get()
         val client = project.client!!
-        LOGGER.info { "Class used for the client reference: ${client::class.java}" }
+        logger.info { "Class used for the client reference: ${client::class.java}" }
         assertTrue(HibernateProxy::class.java.isAssignableFrom(client::class.java))
     }
 
@@ -37,29 +38,26 @@ class ProjectRepositoryTest(
         val project = projectRepository.findById(1).get()
         assertTrue(project == project.copy())
     }
-//
-//
-//    /*
-//        needts implement own hashcode method
-//   google: jpa hashcode and equals
-//     */
-//    @Test
-//    fun hashCodeIsConsistent() {
-//        val awesomeClient = clientRepository.findById(1).get()
-//
-//        val awesomeProject = Project().apply {
-//            name = "Awesome project"
-//            client = awesomeClient
-//        }
-//
-//        val hashSet = hashSetOf(awesomeProject)
-//        LOGGER.info { "hashCode before save: " + awesomeProject.hashCode().toString() }
-//
-//        projectRepository.save(awesomeProject)
-//        LOGGER.info { "hashCode after save: " + awesomeProject.hashCode().toString() }
-//
-//        assertTrue(awesomeProject in hashSet)
-//    }
+
+    /**
+     *   it needs implement own hashcode method
+     *   how to do it, just google it by "jpa hashcode and equals"
+     */
+    @Test
+    fun hashCodeIsConsistent() {
+        val awesomeProject = Project().apply {
+            name = "Awesome project"
+            client = Client(1L, "client name")
+        }
+
+        val hashSet = hashSetOf(awesomeProject)
+        logger.info { "hashCode before save: " + awesomeProject.hashCode().toString() }
+
+        projectRepository.save(awesomeProject)
+        logger.info { "hashCode after save: " + awesomeProject.hashCode().toString() }
+
+        assertTrue(awesomeProject in hashSet)
+    }
 
 
 //    @Test
@@ -87,7 +85,7 @@ class ProjectRepositoryTest(
 
 
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(ProjectRepositoryTest::class.java)
+        private val logger = LoggerFactory.getLogger(ProjectRepositoryTest::class.java)
     }
 
 }
