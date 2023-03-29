@@ -73,14 +73,14 @@ class ProjectRepositoryTest(
 
         assertFalse(project.isNew())
     }
-//
+
 //    @Test
 //    fun lateInitWorks() {
 //        val project = Project().apply {
 //            client = Client().apply { name = "Denys" }
 //        }
 //
-//        assertTrue(project.client.name != null)
+//        assertTrue(project.client!!.name != null)
 //    }
 
 

@@ -5,6 +5,14 @@ spring:
     password: projects
 
   jpa:
+#    Enable the logging of all the generated SQL statements to the console
     show-sql: true
     properties:
+#      Format the generated SQL statement to make it more readable, but takes up more screen space.
       hibernate.format_sql: true
+#      Hibernate will put comments inside all generated SQL statements to hint what’s the generated SQL trying to do
+      hibernate.use_sql_comments: true
+
+#logging:
+#  level:
+##    org.hibernate.SQL: DEBUG
