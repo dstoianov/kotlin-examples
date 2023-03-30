@@ -10,12 +10,13 @@ import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
 import javax.persistence.OneToMany
 import javax.persistence.Table
+import org.hibernate.Hibernate
 import org.hibernate.annotations.NaturalId
 
 
+//open /* we do not need open here we have enabled plugin */
 @Table(name = "project")
 @Entity
-//open /* we do not need open here we have enabled plugin */
 data class Project(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +30,16 @@ data class Project(
     var name: String? = null
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "client_id", nullable = true)
-    var client : Client?  =null
+    @JoinColumn(name = "client_id", nullable = false)
+    var client: Client? = null
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+        other as Project
+
+        return id != null && id == other.id
+    }
 
     override fun hashCode(): Int = javaClass.hashCode()
 
@@ -45,7 +54,7 @@ data class Client(
     val id: Long? = null,
 
     @Column(name = "name", nullable = false)
-    var name: String? = null,
+    var name: String,
 
     @OneToMany(mappedBy = "client", orphanRemoval = true)
     var projects: MutableSet<Project> = mutableSetOf(),

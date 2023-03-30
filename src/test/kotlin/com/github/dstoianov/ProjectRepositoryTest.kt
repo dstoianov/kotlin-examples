@@ -13,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ProjectRepositoryTest(
     @Autowired val projectRepository: ProjectRepository,
-    @Autowired val clientRepository: ClientRepository
 ) {
 
     @Test
@@ -25,6 +24,8 @@ class ProjectRepositoryTest(
     /**
      * https://docs.oracle.com/javaee/5/tutorial/doc/bnbqa.html
      * https://docs.oracle.com/cd/E19798-01/821-1841/bnbqb/index.html
+     *
+     * LAZY does not work
      */
     @Test
     fun lazyLoadEnabled() {
@@ -34,6 +35,15 @@ class ProjectRepositoryTest(
         assertTrue(HibernateProxy::class.java.isAssignableFrom(client::class.java))
     }
 
+    /**
+     * fail
+     * java.lang.StackOverflowError
+     *
+     * https://www.baeldung.com/kotlin/data-class-equals-method
+     *
+     * leave id only in primary constructor
+     *
+     */
     @Test
     fun equalsIssue() {
         val project = projectRepository.findById(1).get()
@@ -41,8 +51,12 @@ class ProjectRepositoryTest(
     }
 
     /**
+     *  fail
      *   it needs implement own hashcode method
      *   how to do it, just google it by "jpa hashcode and equals"
+     *
+     *   https://vladmihalcea.com/the-best-way-to-implement-equals-hashcode-and-tostring-with-jpa-and-hibernate/
+     *   https://thorben-janssen.com/ultimate-guide-to-implementing-equals-and-hashcode-with-hibernate/
      */
     @Test
     fun hashCodeIsConsistent() {
@@ -60,7 +74,10 @@ class ProjectRepositoryTest(
         assertTrue(awesomeProject in hashSet)
     }
 
-
+    /*
+    * fail
+    * set id to val, add method     fun isNew() = id == null
+     */
     @Test
     fun valForIdTest() {
         val project = Project().apply {
